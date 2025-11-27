@@ -1,24 +1,41 @@
 ﻿
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+
 namespace AzureBlobProject.Services
 {
     public class ContainerService : IContainerService
     {
-        Task IContainerService.CreateContainer(string containerName)
+        private readonly BlobServiceClient _blobClient;
+        public ContainerService(BlobServiceClient blobClient)
         {
-            throw new NotImplementedException();
+            _blobClient = blobClient;
+        }
+        public async Task CreateContainer(string containerName)
+        {
+            BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
+            await blobContainerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
         }
 
-        Task IContainerService.DeleteContainer(string containerName)
+        public async Task DeleteContainer(string containerName)
         {
-            throw new NotImplementedException();
+            BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
+            await blobContainerClient.DeleteIfExistsAsync();
         }
 
-        Task<List<string>> IContainerService.GetAllContainer()
+        public async Task<List<string>> GetAllContainer()
         {
-            throw new NotImplementedException();
+            List<string> containerName = new();
+
+            await foreach (BlobContainerItem blobContainerItem in _blobClient.GetBlobContainersAsync())
+            {
+                containerName.Add(blobContainerItem.Name);
+            }
+
+            return containerName;
         }
 
-        Task<List<string>> IContainerService.GetAllContainerAndBlobs()
+        public Task<List<string>> GetAllContainerAndBlobs()
         {
             throw new NotImplementedException();
         }
