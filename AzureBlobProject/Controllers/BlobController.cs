@@ -20,6 +20,42 @@ namespace AzureBlobProject.Controllers
             return View(blobsObj);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AddFile(string containerName)
+        {
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddFile(string containerName, IFormFile file)
+        {
+            if (file == null || file.Length < 1) return View();
+            //file name - xps_img2.png 
+            //new name - xps_img2_GUIDHERE.png
+            var fileName = Path.GetFileNameWithoutExtension(file.FileName) + "_" + Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var result = await _blobService.CreateBlob(fileName, file, containerName, new BlobModel());
+
+            if (result)
+                return RedirectToAction("Manage", new { containerName });
+
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewFile(string name, string containerName)
+        {
+            return Redirect(await _blobService.GetBlob(name, containerName));
+        }
+
+        public async Task<IActionResult> DeleteFile(string name, string containerName)
+        {
+            await _blobService.DeleteBlob(name, containerName);
+            return RedirectToAction("Manage", new { containerName });
+        }
+
 
     }
 }
