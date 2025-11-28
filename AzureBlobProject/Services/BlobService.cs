@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using AzureBlobProject.Models;
 
 namespace AzureBlobProject.Services
@@ -21,7 +22,22 @@ namespace AzureBlobProject.Services
                 ContentType = file.ContentType
             };
 
-            var result = await blobClient.UploadAsync(file.OpenReadStream(), httpHeaders);
+            IDictionary<string, string> metaData = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(blobModel.Title))
+            {
+                metaData.Add("title", blobModel.Title);
+            }
+            if (!string.IsNullOrEmpty(blobModel.Comment))
+            {
+                metaData.Add("comment", blobModel.Comment);
+            }
+
+            var result = await blobClient.UploadAsync(file.OpenReadStream(), httpHeaders, metaData);
+
+            //IDictionary<string,string> removeMetaData = new Dictionary<string, string>();
+
+            //metaData.Remove("title");
+            //await blobClient.SetMetadataAsync(metaData);
 
             if (result != null)
             {
@@ -56,7 +72,33 @@ namespace AzureBlobProject.Services
 
         public async Task<List<BlobModel>> GetAllBlobsWithUri(string containerName)
         {
-            throw new NotImplementedException();
+            BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
+            var blobs = blobContainerClient.GetBlobsAsync();
+
+            List<BlobModel> blobList = new List<BlobModel>();
+
+
+            await foreach (var blob in blobs)
+            {
+                var blobClient = blobContainerClient.GetBlobClient(blob.Name);
+
+                BlobModel blobModel = new()
+                {
+                    Uri = blobClient.Uri.AbsoluteUri
+                };
+                BlobProperties properties = await blobClient.GetPropertiesAsync();
+                if (properties.Metadata.ContainsKey("title"))
+                {
+                    blobModel.Title = properties.Metadata["title"];
+                }
+                if (properties.Metadata.ContainsKey("comment"))
+                {
+                    blobModel.Comment = properties.Metadata["comment"];
+                }
+                blobList.Add(blobModel);
+            }
+
+            return blobList;
         }
 
         public async Task<string> GetBlob(string name, string containerName)
