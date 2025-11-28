@@ -24,7 +24,7 @@ namespace AzureBlobProject.Controllers
 
         public async Task<IActionResult> PrivateImages()
         {
-            return View(_blobService.GetAllBlobsWithUri("test").GetAwaiter().GetResult());
+            return View(_blobService.GetAllBlobsWithUri("test-image-private").GetAwaiter().GetResult());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
