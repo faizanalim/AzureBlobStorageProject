@@ -6,7 +6,7 @@ using TangyAzureFunc.Data;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
-//builder.ConfigureFunctionsWebApplication();
+builder.ConfigureFunctionsWebApplication();
 
 
 // Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
