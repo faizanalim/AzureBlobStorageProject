@@ -22,7 +22,7 @@ namespace AzureFunctionTangyWeb.Controllers
         //http://localhost:7136/api/OnSalesUploadWriteToQueue
 
         [HttpPost]
-        public async Task<IActionResult> Index(SalesRequest salesRequest)
+        public async Task<IActionResult> Index(SalesRequest salesRequest, IFormFile file)
         {
             salesRequest.Id = Guid.NewGuid().ToString();
             using var client = _httpClientFactory.CreateClient();
@@ -31,9 +31,11 @@ namespace AzureFunctionTangyWeb.Controllers
             {
                 HttpResponseMessage response = await client.PostAsync("OnSalesUploadWriteToQueue", content);
                 string returnValue = await response.Content.ReadAsStringAsync();
-
             }
-
+            if (file != null)
+            {
+                var fileName = salesRequest.Id + Path.GetExtension(file.FileName);
+            }
 
             return RedirectToAction(nameof(Index));
         }
