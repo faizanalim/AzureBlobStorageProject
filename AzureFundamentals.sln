@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureBlobExample", "AzureBl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureFunctionExample", "AzureFunctionExample", "{BF416024-DB7C-46A6-B54A-2BEEF68E23F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctionTangyWeb", "AzureFunctionTangyWeb\AzureFunctionTangyWeb.csproj", "{5F914E21-302C-4833-8762-E8EFD3579AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctionTangyWeb", "AzureFunctionTangyWeb\AzureFunctionTangyWeb.csproj", "{5F914E21-302C-4833-8762-E8EFD3579AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TangyAzureFunc", "TangyAzureFunc\TangyAzureFunc.csproj", "{E9147C2E-5C23-40D1-BFBF-49B40746C70E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TangyAzureFunc", "TangyAzureFunc\TangyAzureFunc.csproj", "{E9147C2E-5C23-40D1-BFBF-49B40746C70E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
